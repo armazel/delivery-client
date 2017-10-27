@@ -22,6 +22,7 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
   },
+
   dev: {
     env: require('./dev.env'),
     port: 13070,
