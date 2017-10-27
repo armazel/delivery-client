@@ -7,6 +7,7 @@
        orientation="landscape"
        picker-type="modal"
        icon="events"
+       :max-date="new Date()"
        placeholder="Выберите дату"
        v-model="firstPeriod"
        :lang="langMass"
@@ -23,6 +24,7 @@
       orientation="landscape"
       picker-type="modal"
       placeholder="Выберите дату"
+      :max-date="new Date()"
       v-model="secondPeriod"
       :lang="langMass"
     >
@@ -38,7 +40,6 @@
 
   export default {
     name: 'date-picker-area',
-
 
     data(){
       return{

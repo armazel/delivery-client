@@ -34,7 +34,7 @@ export default {
   toDate
 }
 
-function formatDate (date, format) {
+function formatDate(date, format) {
   if (!date) {
     return ''
   }
@@ -45,12 +45,12 @@ function formatDate (date, format) {
   return date ? date.format(format ? format : DATE_FORMAT) : ''
 }
 
-function toDate (date) {
+function toDate(date) {
   let answer = String(moment(date).format('DD-MM-YYYY'));
   return answer;
 }
 
-function getMonthName (monthName, year) {
+function getMonthName(monthName, year) {
   let answer = moment().month(monthName).format('M')
   if (answer.length < 2) {
     answer = '0' + answer
@@ -62,18 +62,18 @@ function getMonthName (monthName, year) {
   return {firstDate, secondDate}
 }
 
-function formateToMoment (first) {
+function formateToMoment(first) {
   if (first) {
     return moment(first).format('YYYY-MM-DD')
   }
 }
 
-function duration (startDate, endDate) {
+function duration(startDate, endDate) {
   let answer = Math.abs(moment(startDate).diff(moment(endDate), 'day'))
   return answer
 }
 
-function addSomethingToDate (first, second) {
+function addSomethingToDate(first, second) {
   if (second === 0) {
     return moment(first).format('YYYY-MM-DD')
   } else {
@@ -83,12 +83,11 @@ function addSomethingToDate (first, second) {
   }
 }
 
-function getMonth (count) {
+function getMonth(count) {
   return moment.months(count)
-
 }
 
-function formatTime (time, format) {
+function formatTime(time, format) {
   if (!time) {
     return ''
   }
@@ -99,7 +98,7 @@ function formatTime (time, format) {
   return time ? time.format(format ? format : TIME_FORMAT) : ''
 }
 
-function formatDateTime (dateTime, format) {
+function formatDateTime(dateTime, format) {
   if (!dateTime) {
     return ''
   }
@@ -110,19 +109,19 @@ function formatDateTime (dateTime, format) {
   return dateTime ? dateTime.format(format ? format : DATETIME_FORMAT) : ''
 }
 
-function formatDateJson (date) {
+function formatDateJson(date) {
   return formatDate(date, JSON_DATE_FORMAT)
 }
 
-function formatTimeJson (time) {
+function formatTimeJson(time) {
   return formatTime(time, JSON_TIME_FORMAT)
 }
 
-function formatDateTimeJson (date) {
+function formatDateTimeJson(date) {
   return formatDateTime(date, JSON_DATETIME_FORMAT)
 }
 
-function parseDate (dateStr) {
+function parseDate(dateStr) {
   if (dateStr) {
     if (moment.isDate(dateStr)) {
       return fromDate(dateStr)
@@ -131,7 +130,7 @@ function parseDate (dateStr) {
   }
   return null
 }
-function parseTime (timeStr) {
+function parseTime(timeStr) {
   if (timeStr) {
     if (moment.isDate(timeStr)) {
       return fromDate(timeStr)
@@ -141,7 +140,7 @@ function parseTime (timeStr) {
   return null
 }
 
-function parseDateTime (dateTimeStr) {
+function parseDateTime(dateTimeStr) {
   if (dateTimeStr) {
     if (moment.isDate(dateTimeStr)) {
       return fromDate(dateTimeStr)
@@ -151,18 +150,18 @@ function parseDateTime (dateTimeStr) {
   return null
 }
 
-function fromDate (date) {
+function fromDate(date) {
   if (date) {
     return moment(date)
   }
 }
 
-function fromNow (value) {
+function fromNow(value) {
   if (value) {
     return moment(value).fromNow()
   }
 }
 
-function now () {
+function now() {
   return moment()
 }

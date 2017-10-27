@@ -40,6 +40,4 @@ OrderDocument.fromRequest = function (data) {
 
     return document;
 };
-
-
 export default OrderDocument;

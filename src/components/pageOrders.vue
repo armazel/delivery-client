@@ -367,9 +367,9 @@
       },
 
       editOrder(order){
-        this.selectionOrder=order;
-        if(order){
-          this.$refs['modal-order'].open(order,1);
+        this.selectionOrder = order;
+        if (order) {
+          this.$refs['modal-order'].open(order, 1);
         }
       },
 
@@ -395,7 +395,11 @@
       if(lowerFilter){
         answer = moments.toDate(answer);
       }
-      return answer.toLowerCase().includes(lowerFilter);
+      if(searchTemplate === 'timeSend' || searchTemplate === 'date'){
+        return answer.toLowerCase().includes(lowerFilter);
+      } else{
+        return line[searchTemplate].toLowerCase().includes(lowerFilter);
+      }
     });
   }
 </script>

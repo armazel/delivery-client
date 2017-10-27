@@ -16,6 +16,11 @@ export default new Router({
       path: '/pageOrders',
       name: 'pageOrders',
       component: pageOrders
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: pageOrders
     }
   ]
 })

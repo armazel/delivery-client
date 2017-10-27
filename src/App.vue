@@ -31,14 +31,24 @@
                    @select="onMenuItemClick" @close="$refs.toolbarMenuButton.closeDropdown()"></ui-menu>
         </ui-icon-button>
       </div>
+      <div class="alerts-panel">
+        <div class="alerts" v-if="alerts.length">
+          <ui-alert v-for="alert in alerts" :type="alert.type" :key="alert.id" @dismiss="dismissAlert(alert)">{{ alert.message }}
+
+
+          </ui-alert>
+        </div>
+      </div>
     </header>
     <main>
       <router-view></router-view>
     </main>
   </div>
 </template>
-
 <script>
+  import { actions } from '../src/store'
+  import { moments } from '../src/utils'
+  import _ from 'lodash'
 
   const MENU_OPTION_REFRESH = {
     id: 'refresh',
@@ -87,6 +97,10 @@
         return 5;
       },
 
+      alerts() {
+        return this.$store.getters.alerts;
+      },
+
       receiveBreadcrumbs(breadcrumbs) {
         this.breadcrumbs = breadcrumbs || [];
       },
@@ -117,6 +131,10 @@
             this.logout();
             break;
         }
+      },
+
+      dismissAlert(alert) {
+        this.$store.dispatch(actions.dismissAlert, alert);
       },
     }
   }
@@ -238,5 +256,32 @@ header span {
   font-weight: 400;
   box-sizing: border-box;
   //padding-top: 16px;
+}
+
+.alerts-panel {
+  position: absolute;
+  top: 15%;
+  max-height: 100vh;
+  width: 100vw;
+  z-index: 100;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  pointer-events: none;
+  .ui-alert--type-warning .ui-alert__icon{
+    position: relative;
+    top: 25%;
+  }
+}
+
+.alerts {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding-top: 1rem;
+  width: 50vw;
+  pointer-events: auto;
 }
 </style>

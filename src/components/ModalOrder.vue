@@ -27,6 +27,7 @@
                   placeholder="Select a date"
                   v-model="date"
                   :lang="langMass"
+                  :min-date="new Date()"
                 >Дата/время создания
                 </ui-datepicker>
 
@@ -80,6 +81,7 @@
                   placeholder="Select a date"
                   v-model="timeSend"
                   :lang="langMass"
+                  :min-date="new Date()"
                 >Дата/время доставки
                 </ui-datepicker>
 
@@ -129,7 +131,6 @@
     import Api from '../api'
     import {actions} from '../store'
     import {moments} from '../utils'
-    import {OrderDocument} from '../data/order'
     import languageFr from '../utils/lang/lang-ru'
     import Order from '../data/order'
 
@@ -301,7 +302,6 @@
             },
 
           onEndDatetimeChanged: function(newEnd) {
-              debugger;
             let startPicker = this.$.startPicker.control;
             startPicker.maxDate(newEnd);
           },
@@ -323,29 +323,28 @@
                 if (this.numberOrder > 0) {
                   order.id = this.numberOrder;
                 }
-               order.date = this.date
-               order.pointOfDelivery = this.pointOfDelivery
-               order.client = this.clientInfo
-               order.addressInfo = this.addressInfo
-               order.phoneNumber = this.phoneNumber
-               order.statusOrder = this.statusOrder
-               order.timeSend = this.timeSend
-               order.type = this.type
-               order.curierName = this.curierName
-
+               order.date = this.date;
+               order.pointOfDelivery = this.pointOfDelivery;
+               order.client = this.clientInfo;
+               order.addressInfo = this.addressInfo;
+               order.phoneNumber = this.phoneNumber;
+               order.statusOrder = this.statusOrder;
+               order.timeSend = this.timeSend;
+               order.type = this.type;
+               order.curierName = this.curierName;
                 // Сохраняем объект на сервере
-                this.$store.dispatch(actions.saveOrder, good)
-                    .then(() => {
-                        this.saving = false;
-                        this.$store.dispatch(actions.addAlertSuccess, 'Заказ сохранен');
-                        this.close();
-                        /*Перезагрузка страницы*/
-                        this.$store.dispatch(actions.reQueryGoods);
-                    })
-                    .catch((error) => {
-                        this.saving = false;
-                        this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
-                    });
+              /*this.$store.dispatch(actions.saveOrder, order)
+                .then(() => {
+                  this.saving = false;
+                  this.$store.dispatch(actions.addAlertSuccess, 'Заказ сохранен');
+                  this.close();
+                  /!*Перезагрузка страницы*!/
+                  this.$store.dispatch(actions.reQueryGoods);
+                })
+                .catch((error) => {
+                  this.saving = false;
+                  this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
+                });*/
             }
         }
     };
@@ -364,6 +363,10 @@
       .ui-select{
         width: 100%;
         text-align: left;
+      }
+      .ui-select__options{
+        overflow: auto;
+        max-height: 100px;
       }
     }
   }
@@ -384,6 +387,10 @@
     height: 3.5rem;
     box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.16);
     background-color: #f5f5f5;
+    .ui-button--type-primary.ui-button--color-primary,
+    .ui-button--type-primary.ui-button--color-primary{
+      background-color: #35495E;
+    }
   }
   .ui-datepicker__display-value{
     text-align: left !important;
