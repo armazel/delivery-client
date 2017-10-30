@@ -56,6 +56,7 @@ module.exports = {
     "skipBlankLines": 0,
     "max-len": [0, 120, 4],
     "no-console": 0,
+    "no-undef": 0,
     "arrow-spacing": 0,
     "space-before-function-paren": 0,
     "keyword-spacing": 0,
