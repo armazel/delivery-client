@@ -136,7 +136,6 @@
 
     watch:{
       authenticated(val){
-          debugger;
         this.authenticatedFlag = val;
       }
     },

@@ -135,7 +135,6 @@
         }
       },
       authenticated(){
-          debugger;
         return this.$store.getters.authenticated;
       },
     },
@@ -415,7 +414,6 @@
   }
 
   function filterDelivery(lines, filter, searchTemplate) {
-      debugger;
     if (!filter.length) {
       return lines;
     }
