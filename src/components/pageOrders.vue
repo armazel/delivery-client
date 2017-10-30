@@ -133,7 +133,10 @@
         if (this.$store.getters.getReports) {
           return this.$store.getters.getReports
         }
-      }
+      },
+      authenticated(){
+        return this.$store.getters.authenticated;
+      },
     },
 
     data () {
@@ -374,12 +377,6 @@
         this.detailSearchText = val;
         this.filterLinesDebounced();
         this.templateSearch = 'curierName';
-      },
-    },
-
-    computed:{
-      authenticated(){
-        return this.$store.getters.authenticated;
       },
     },
 

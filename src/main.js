@@ -37,7 +37,6 @@ sync(store, router);
 checkAuth()
   .then(initApp);
 
-
 function checkAuth() {
   return Promise.resolve()
     .then(() => {
@@ -61,9 +60,6 @@ function checkAuth() {
       return false;
     });
 }
-
-
-
 
 function initApp(authenticated) {
   new Vue({
