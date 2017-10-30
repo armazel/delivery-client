@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header  v-if="authenticated">
+    <header  v-if="authenticatedFlag">
       <div class="page-info">
         <img class="logo" src="../static/img/logo_restfront.png">
         <rf-breadcrumbs title="Доставка" :items="breadcrumbs"></rf-breadcrumbs>
@@ -90,6 +90,7 @@
           },
         ],
         breadcrumbs: [],
+        authenticatedFlag:false,
       };
     },
 
@@ -107,7 +108,7 @@
       },
 
       authenticated(){
-        return this.$store.getters.authenticated;
+        this.authenticatedFlag = this.$store.getters.authenticated;
       },
 
       alerts() {
@@ -131,6 +132,13 @@
         options.push(MENU_OPTION_LOGOUT);
         return options;
       },
+    },
+
+    watch:{
+      authenticated(val){
+          debugger;
+        this.authenticatedFlag = val;
+      }
     },
 
     methods:{

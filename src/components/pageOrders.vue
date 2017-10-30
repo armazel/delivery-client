@@ -135,6 +135,7 @@
         }
       },
       authenticated(){
+          debugger;
         return this.$store.getters.authenticated;
       },
     },

@@ -18,7 +18,7 @@
           @keydown-enter="login"
           label="Пароль" >
         </ui-textbox>
-        <ui-button buttonType="button" type="primary" color="primary" @click="login">
+        <ui-button buttonType="button" type="primary" color="primary" @click="login" @keydown-enter="login">
           Войти
         </ui-button>
       </div>
