@@ -8,4 +8,8 @@ export default {
   addAlertWarning: 'addAlertWarning',
   addAlertError: 'addAlertError',
   dismissAlert: 'dismissAlert',
+
+  authProcessInput: 'authProcessInput',
+  authLogin: 'authLogin',
+  authLogout: 'authLogout',
 }

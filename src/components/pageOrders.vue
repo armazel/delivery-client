@@ -1,106 +1,118 @@
 <template>
-  <div>
-    <div class="controll-panel">
-      <ui-button @click="openOrder" color="accent" icon="add">Добавить заказ</ui-button>
-    </div>
-    <rf-table bordered striped hover
-              keyField="id"
-              :headerHeight="34"
-              :lineHeight="44"
-              :selection="selectionOrder"
-              @select="editOrder"
-              :lines="dataInfo">
-      <template slot="header">
-        <th style="display: flex; flex: 1 1 5%">Номер</th>
-        <th style="display: flex; flex: 1 1 5%">Дата/время создания</th>
-        <th  style="display: flex; flex: 1 1 10%">Точка доставки</th>
-        <th  style="display: flex; flex: 1 1 10%">ФИО</th>
-        <th  style="display: flex; flex: 1 1 10%">Адресс</th>
-        <th  style="display: flex; flex: 1 1 5%">Телефон</th>
-        <th  style="display: flex; flex: 1 1 5%">Тип</th>
-        <th  style="display: flex; flex: 1 1 5%">Статус</th>
-        <th  style="display: flex; flex: 1 1 5%">Дата/время доставки</th>
-        <th  style="display: flex; flex: 1 1 5%">Курьер</th>
-      </template>
+ <div>
+   <div v-if="authenticated">
+     <div class="controll-panel">
+       <ui-button @click="openOrder" color="accent" icon="add">Добавить заказ</ui-button>
+     </div>
+     <rf-table bordered striped hover
+               keyField="id"
+               :headerHeight="34"
+               :lineHeight="44"
+               :selection="selectionOrder"
+               @select="editOrder"
+               :lines="dataInfo">
+       <template slot="header">
+         <th style="display: flex; flex: 1 1 5%">Номер</th>
+         <th style="display: flex; flex: 1 1 5%">Имя оператора</th>
+         <th style="display: flex; flex: 1 1 5%">Дата/время создания</th>
+         <th  style="display: flex; flex: 1 1 10%">Точка доставки</th>
+         <th  style="display: flex; flex: 1 1 10%">ФИО</th>
+         <th  style="display: flex; flex: 1 1 10%">Адресс</th>
+         <th  style="display: flex; flex: 1 1 5%">Телефон</th>
+         <th  style="display: flex; flex: 1 1 5%">Тип</th>
+         <th  style="display: flex; flex: 1 1 5%">Статус</th>
+         <th  style="display: flex; flex: 1 1 5%">Дата/время доставки</th>
+         <th  style="display: flex; flex: 1 1 5%">Курьер</th>
+       </template>
 
-      <template slot="filters">
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-textbox placeholder="Поиск по номеру" v-model="idSearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-textbox placeholder="Поиск по дате" v-model="dateSearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 10%">
-          <ui-select class="configs" placeholder="Точка доставки" v-model="pointOfDeliverySelect" :options="pointOfDelivery" :keys="{label: 'name', value: 'select'}"></ui-select>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 10%">
-          <ui-textbox placeholder="Поиск по фио" v-model="clientSearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 10%">
-          <ui-textbox placeholder="Поиск по адресу" v-model="adressSearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-textbox placeholder="Поиск по телефону" v-model="phoneSearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-select class="configs" placeholder="Тип доставки" v-model="typeDeliverySelect" :options="typeDelivery" :keys="{label: 'name', value: 'select'}"></ui-select>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-select class="configs" placeholder="Статус доставки" v-model="typeStatusSelect" :options="typeStatus" :keys="{label: 'name', value: 'select'}"></ui-select>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-textbox placeholder="Поиск по времени" v-model="deliverySearch"></ui-textbox>
-        </td>
-        <td class="option-panel" style="display: flex; flex: 1 1 5%">
-          <ui-textbox placeholder="Поиск по имени" v-model="curierSearch"></ui-textbox>
-        </td>
-      </template>
-      <template slot-scope="props">
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{props.line.id}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{dateFilter(props.line.date)}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 10%">
-          <span>{{props.line.pointOfDelivery}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 10%">
-         <span>{{props.line.client}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 10%">
-          <span>{{props.line.addressInfo}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{props.line.phoneNumber}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{props.line.type}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{props.line.statusOrder}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{dateFilter(props.line.timeSend)}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-        <td style="display: flex; flex: 1 1 5%">
-          <span>{{props.line.curierName}}</span>
-          <img class="setting-hover" src="../assets/settings.png">
-        </td>
-      </template>
-    </rf-table>
-    <modal-order ref="modal-order" />
+       <template slot="filters">
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по номеру" v-model="idSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по имени" v-model="operatorNameSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по дате" v-model="dateSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 10%">
+           <ui-select class="configs" placeholder="Точка доставки" v-model="pointOfDeliverySelect" :options="pointOfDelivery" :keys="{label: 'name', value: 'select'}"></ui-select>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 10%">
+           <ui-textbox placeholder="Поиск по фио" v-model="clientSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 10%">
+           <ui-textbox placeholder="Поиск по адресу" v-model="adressSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по телефону" v-model="phoneSearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-select class="configs" placeholder="Тип доставки" v-model="typeDeliverySelect" :options="typeDelivery" :keys="{label: 'name', value: 'select'}"></ui-select>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-select class="configs" placeholder="Статус доставки" v-model="typeStatusSelect" :options="typeStatus" :keys="{label: 'name', value: 'select'}"></ui-select>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по времени" v-model="deliverySearch"></ui-textbox>
+         </td>
+         <td class="option-panel" style="display: flex; flex: 1 1 5%">
+           <ui-textbox placeholder="Поиск по имени" v-model="curierSearch"></ui-textbox>
+         </td>
+       </template>
+       <template slot-scope="props">
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.id}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.operatorName}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{dateFilter(props.line.date)}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 10%">
+           <span>{{props.line.pointOfDelivery}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 10%">
+           <span>{{props.line.client}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 10%">
+           <span>{{props.line.addressInfo}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.phoneNumber}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.type}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.statusOrder}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{dateFilter(props.line.timeSend)}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+         <td style="display: flex; flex: 1 1 5%">
+           <span>{{props.line.curierName}}</span>
+           <img class="setting-hover" src="../assets/settings.png">
+         </td>
+       </template>
+     </rf-table>
+     <modal-order ref="modal-order" />
 
-  </div>
+   </div>
+   <div v-if="!authenticated" class="anauthenticated"> <h1>Заказы</h1>
+   </div>
+ </div>
 </template>
 <script>
   import Api from '../api/orderApi'
@@ -129,6 +141,7 @@
         dataInfo: [],
         templateSearch:'',
         idSearch:'',
+        operatorNameSearch:'',
         selectionOrder:[],
         clientSearch:'',
         dateSearch:'',
@@ -197,6 +210,7 @@
         info: [
           {
             id: '325FFER356',
+            operatorName:'Авдотья',
             date: new Date(),
             pointOfDelivery: 'Карлова 8',
             client: 'Прометей',
@@ -209,6 +223,7 @@
           },
           {
             id: '24ПА34R356',
+            operatorName:'Авдотий',
             date: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
@@ -221,6 +236,7 @@
           },
           {
             id: '24ПА34R356',
+            operatorName:'Анатоль',
             date: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
@@ -233,6 +249,7 @@
           },
           {
             id: '24ПА34R356',
+            operatorName:'Евгатий',
             date: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
@@ -245,6 +262,7 @@
           },
           {
             id: '24ПА34R356',
+            operatorName:'Светозар',
             date: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
@@ -257,6 +275,7 @@
           },
           {
             id: '14G35FJ554H6',
+            operatorName:'Аристарх',
             date: new Date(),
             pointOfDelivery: 'Фрунзе 34',
             client: 'Аполон',
@@ -269,6 +288,7 @@
           },
           {
             id: '42G45HG45G',
+            operatorName:'Прокоп',
             date: new Date(),
             pointOfDelivery: 'Карлова 8',
             client: 'Гамора',
@@ -291,6 +311,11 @@
       idSearch(val) {
         this.detailSearchText = val;
         this.templateSearch = 'id';
+        this.filterLinesDebounced();
+      },
+      operatorNameSearch(val) {
+        this.detailSearchText = val;
+        this.templateSearch = 'operatorName';
         this.filterLinesDebounced();
       },
       typeDeliverySelect(val) {
@@ -352,6 +377,12 @@
       },
     },
 
+    computed:{
+      authenticated(){
+        return this.$store.getters.authenticated;
+      },
+    },
+
     methods: {
       dateFilter(date){
         let answer = moments.toDate(date);
@@ -386,6 +417,7 @@
   }
 
   function filterDelivery(lines, filter, searchTemplate) {
+      debugger;
     if (!filter.length) {
       return lines;
     }
@@ -408,12 +440,19 @@
 
 <style lang="scss">
   .table-component__table tbody tr:nth-child(even)
+  .rf-table tr{
+    font-size: 15px !important;
+  }
   td{
     display: flex;
     align-items: center;
     background: ghostwhite;
     justify-content: center;
     overflow: hidden !important;
+    font-size: 15px !important;
+  }
+  th{
+    justify-content: center !important;
   }
   td img{
     position: absolute;
@@ -439,6 +478,19 @@
   }
   main{
     margin-top: 0;
+  }
+  .anauthenticated{
+    position: fixed;
+    background: gray;
+    height: 100vh;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.3;
+    top:0;
+    left:0;
+    width: 100%;
   }
   .controll-panel{
     margin: 5px auto;

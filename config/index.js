@@ -1,12 +1,15 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+const BUILD_NUMBER = (process.env.BUILD_NUMBER || '').trim() || 'dev';
+
 module.exports = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
+    //version: BUILD_NUMBER,
     assetsPublicPath: '/',
     assetsNodeModulesPath: '/node_modules/',
     productionSourceMap: true,
@@ -25,8 +28,10 @@ module.exports = {
 
   dev: {
     env: require('./dev.env'),
-    port: 13170,
+    port: 13171,
+    serverUrl: "http://rf-server:13170",
     autoOpenBrowser: true,
+    version: 'dev',
     assetsSubDirectory: 'static',
     assetsNodeModulesPath: '/node_modules/',
     assetsPublicPath: '/',

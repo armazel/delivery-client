@@ -3,12 +3,12 @@
     <div class="page-login">
       <!--v-model="" @keydown-enter=""-->
       <div class="login-block">
-        <ui-textbox
+       <!-- <ui-textbox
           floating-label
           type="login"
           placeholder="Введите логин"
           label="Логин" >
-        </ui-textbox>
+        </ui-textbox>-->
         <ui-textbox
           class="password"
           floating-label
@@ -18,11 +18,9 @@
           @keydown-enter="login"
           label="Пароль" >
         </ui-textbox>
-        <router-link
-          to="pageOrders"><ui-button buttonType="button" type="primary" color="primary">
+        <ui-button buttonType="button" type="primary" color="primary" @click="login">
           Войти
         </ui-button>
-        </router-link>
       </div>
     </div>
   </div>
@@ -42,30 +40,31 @@ export default {
   },
 
   mounted(){
-    return this.$store.dispatch(actions.addAlertWarning, 'Необходимо указать пароль');
+
   },
 
-  login() {
-
-    // Должны быть указаны пароль, магазин и конфиг
-    if (!this.inputPassword) {
-      return this.$store.dispatch(actions.addAlertWarning, 'Необходимо указать пароль');
-    }
-    // Просим хранилище добавить новый документ
-    this.$store.dispatch(actions.authLogin, this.inputPassword)
-      .then((user) => {
-        // Перейдем на основную страницу приложения
-        this.$router.push({name: 'pageOrders'});
-        this.$store.dispatch(actions.addAlertSuccess, 'Успешный вход');
-      })
-      .catch((error) => {
-        if (error && error.status === 401) {
-          this.$store.dispatch(actions.addAlertWarning, 'Ошибка логина');
-        } else {
-          console.warn(error);
-          this.$store.dispatch(actions.addAlertWarning, 'Ошибка логина: ' + (error && error.message || error));
-        }
-      });
+  methods:{
+    login() {
+      // Должны быть указаны пароль, магазин и конфиг
+      if (!this.inputPassword) {
+        return this.$store.dispatch(actions.addAlertWarning, 'Необходимо указать пароль');
+      }
+      // Просим хранилище добавить новый документ
+      this.$store.dispatch(actions.authLogin, this.inputPassword)
+        .then((user) => {
+          // Перейдем на основную страницу приложения
+          this.$router.push({name: 'pageOrders'});
+          this.$store.dispatch(actions.addAlertSuccess, 'Успешный вход');
+        })
+        .catch((error) => {
+          if (error && error.status === 401) {
+            this.$store.dispatch(actions.addAlertWarning, 'Ошибка логина');
+          } else {
+            console.warn(error);
+            this.$store.dispatch(actions.addAlertWarning, 'Ошибка логина: ' + (error && error.message || error));
+          }
+        });
+    },
   },
 
 }

@@ -6,6 +6,7 @@ import ActionTypes from './_actions'
 
 import ReportModule from './reportModule'
 import AlertModule from './alertModule'
+import AuthModule from './authModule'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
   // Включать ли режим разработчика
   modules: {
     report: ReportModule,
+    auth: AuthModule,
     alert: AlertModule
   }
 })

@@ -301,4 +301,9 @@
     }
 
   }
+  .option-panel{
+    .ui-textbox,.ui-select{
+      margin: 0;
+    }
+  }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header>
+    <header  v-if="authenticated">
       <div class="page-info">
         <img class="logo" src="../static/img/logo_restfront.png">
         <rf-breadcrumbs title="Доставка" :items="breadcrumbs"></rf-breadcrumbs>
@@ -23,8 +23,8 @@
                    @close="$refs.toolbarMenuButton.closeDropdown()"></ui-menu>
         </ui-icon-button>
       </div>
-      <div class="menu">
-        <span class="user-name">Егор Драгун</span>
+      <div class="menu" v-if="authUser">
+        <span class="user-name">{{authUser.name}}</span>
         <ui-icon-button color="white" has-dropdown icon="account_circle" ref="toolbarMenuButton" size="large"
                         type="secondary">
           <ui-menu contain-focus has-icons slot="dropdown" :options="menuOptions"
@@ -39,6 +39,7 @@
           </ui-alert>
         </div>
       </div>
+      <span class="version">{{version}}</span>
     </header>
     <main>
       <router-view></router-view>
@@ -97,6 +98,18 @@
         return 5;
       },
 
+      version() {
+        return window.VERSION;
+      },
+
+      authUser(){
+        return this.$store.getters.authUser;
+      },
+
+      authenticated(){
+        return this.$store.getters.authenticated;
+      },
+
       alerts() {
         return this.$store.getters.alerts;
       },
@@ -135,6 +148,11 @@
 
       dismissAlert(alert) {
         this.$store.dispatch(actions.dismissAlert, alert);
+      },
+
+      logout() {
+        this.$store.dispatch(actions.authLogout);
+        this.$router.push({name: 'Hello'});
       },
     }
   }
@@ -283,5 +301,15 @@ header span {
   padding-top: 1rem;
   width: 50vw;
   pointer-events: auto;
+  .ui-alert{
+    background: white;
+  }
 }
+.ui-alert--type-success .ui-alert__body{
+  background-color: rgba(76, 175, 80, 0.42);
+}
+  .version{
+    position: relative;
+    right: 0;
+  }
 </style>

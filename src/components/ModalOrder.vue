@@ -1,121 +1,122 @@
 <template>
+  <div>
     <ui-modal class="modal-good-group" ref="modal" dismissOn="esc close-button" @open="visible = true" @close="visible = false">
-        <template slot="header">
-            <h2 v-if="visibleHeader"> <ui-icon class="ui-modal__header-icon" icon="build" style="margin-right: 10px"></ui-icon>Изменение заказа № {{numberOrder}}</h2>
-            <h2 v-if="!visibleHeader"> <ui-icon class="ui-modal__header-icon" icon="add_shopping_cart" style="margin-right: 10px"></ui-icon>Создание заказа</h2>
-        </template>
+      <template slot="header">
+        <h2 v-if="visibleHeader"> <ui-icon class="ui-modal__header-icon" icon="build" style="margin-right: 10px"></ui-icon>Изменение заказа № {{numberOrder}}</h2>
+        <h2 v-if="!visibleHeader"> <ui-icon class="ui-modal__header-icon" icon="add_shopping_cart" style="margin-right: 10px"></ui-icon>Создание заказа</h2>
+      </template>
 
-        <template>
-          <div class="option">
-            <div class="option-block">
+      <template>
+        <div class="option">
+          <div class="option-block">
 
-              <ui-textbox
+            <ui-textbox
+              floating-label
+              icon="vpn_key"
+              label="Номер заказа"
+              v-model="numberOrder">
+            </ui-textbox>
+
+            <div class="date-block">
+             <!-- <vue-timepicker :disabled=true v-model="yourTimeValueCreate" :format=yourFormat></vue-timepicker>-->
+
+              <ui-datepicker
                 floating-label
-                icon="vpn_key"
-                label="Номер заказа"
-                v-model="numberOrder">
-              </ui-textbox>
-
-              <div class="date-block">
-                <vue-timepicker v-model="yourTimeValueCreate" format="HH:mm:ss"></vue-timepicker>
-
-                <ui-datepicker
-                  floating-label
-                  orientation="landscape"
-                  picker-type="modal"
-                  icon="events"
-                  placeholder="Select a date"
-                  v-model="date"
-                  :lang="langMass"
-                  :min-date="new Date()"
-                >Дата/время создания
-                </ui-datepicker>
-
-              </div>
-
-              <ui-select
-                class="configs"
-                placeholder="Точка доставки"
-                label="Точка доставки"
-                icon="edit_location"
-                v-model="pointOfDelivery"
-                :options="pointOfDeliverySend"
-                :keys="{label: 'name', value: 'select'}">
-              </ui-select>
-
-              <ui-textbox
-                floating-label
-                icon="person"
-                label="ФИО"
-                v-model="clientInfo">
-              </ui-textbox>
-
-              <ui-textbox
-                floating-label
-                icon="edit_location"
-                label="Адресс"
-                v-model="addressInfo">
-              </ui-textbox>
+                orientation="landscape"
+                picker-type="modal"
+                icon="events"
+                placeholder="Select a date"
+                :disabled=true
+                v-model="date"
+                :lang="langMass"
+                :min-date="new Date()"
+              >Дата/время создания
+              </ui-datepicker>
 
             </div>
 
-            <div class="option-block">
+            <ui-select
+              class="configs"
+              placeholder="Точка доставки"
+              label="Точка доставки"
+              icon="edit_location"
+              v-model="pointOfDelivery"
+              :options="pointOfDeliverySend"
+              :keys="{label: 'name', value: 'select'}">
+            </ui-select>
 
-              <ui-textbox
-                floating-label
-                icon="call"
-                label="Номер телефона"
-                v-model="phoneNumber">
-              </ui-textbox>
+            <ui-textbox
+              floating-label
+              icon="person"
+              label="ФИО"
+              v-model="clientInfo">
+            </ui-textbox>
 
-              <div class="date-block">
+            <ui-textbox
+              floating-label
+              icon="edit_location"
+              label="Адресс"
+              v-model="addressInfo">
+            </ui-textbox>
 
-                <vue-timepicker v-model="yourTimeValueSend" format="HH:mm:ss"></vue-timepicker>
-
-
-                <ui-datepicker
-                  floating-label
-                  orientation="landscape"
-                  picker-type="modal"
-                  icon="events"
-                  placeholder="Select a date"
-                  v-model="timeSend"
-                  :lang="langMass"
-                  :min-date="new Date()"
-                >Дата/время доставки
-                </ui-datepicker>
-
-              </div>
-              <ui-select floating-label
-                         label="Тип доставки"
-                         icon="send"
-                         class="configs"
-                         placeholder="Статус"
-                         v-model="type"
-                         :options="typeDelivery"
-                         :keys="{label: 'name', value: 'select'}">
-              </ui-select>
-
-              <ui-select floating-label
-                         label="Статус"
-                         icon="info"
-                         class="configs"
-                         placeholder="Статус"
-                         v-model="statusOrder"
-                         :options="typeStatus"
-                         :keys="{label: 'name', value: 'select'}">
-              </ui-select>
-
-              <ui-textbox
-                floating-label
-                icon="supervisor_account"
-                label="Имя курьера"
-                v-model="curierName">
-              </ui-textbox>
-
-            </div>
           </div>
-        </template>
+
+          <div class="option-block">
+
+            <ui-textbox
+              floating-label
+              icon="call"
+              label="Номер телефона"
+              v-model="phoneNumber">
+            </ui-textbox>
+
+            <div class="date-block">
+
+              <vue-timepicker v-model="yourTimeValueSend" :format=yourFormat></vue-timepicker>
+
+
+              <ui-datepicker
+                floating-label
+                orientation="landscape"
+                picker-type="modal"
+                icon="events"
+                v-model="timeSend"
+                :lang="langMass"
+                :min-date="new Date()"
+              >Дата/время доставки
+              </ui-datepicker>
+
+            </div>
+            <ui-select floating-label
+                       label="Тип доставки"
+                       icon="send"
+                       class="configs"
+                       placeholder="Статус"
+                       v-model="type"
+                       :options="typeDelivery"
+                       :keys="{label: 'name', value: 'select'}">
+            </ui-select>
+
+            <ui-select floating-label
+                       label="Статус"
+                       icon="info"
+                       class="configs"
+                       placeholder="Статус"
+                       v-model="statusOrder"
+                       :options="typeStatus"
+                       :keys="{label: 'name', value: 'select'}">
+            </ui-select>
+
+            <ui-textbox
+              floating-label
+              icon="supervisor_account"
+              label="Имя курьера"
+              v-model="curierName">
+            </ui-textbox>
+
+          </div>
+        </div>
+      </template>
 
       <template slot="footer">
         <div class="controll-panel-modal" v-if="visibleHeader">
@@ -125,6 +126,7 @@
         <ui-button @click="close">Закрыть</ui-button>
       </template>
     </ui-modal>
+  </div>
 </template>
 
 <script>
@@ -149,14 +151,13 @@
 
           yourTimeValueCreate: {
             HH: new Date().getHours(),
-            mm: new Date().getMinutes(),
-            ss: new Date().getSeconds()
+            mm: new Date().getMinutes()
           },
+          yourFormat: 'HH:mm',
 
           yourTimeValueSend: {
             HH: new Date().getHours(),
-            mm: new Date().getMinutes(),
-            ss: new Date().getSeconds()
+            mm: new Date().getMinutes()
           },
 
           visibleHeader: '',
@@ -240,7 +241,7 @@
 
             values() {
                 return this.$store.getters.values;
-            }
+            },
         },
 
         watch: {
@@ -416,6 +417,10 @@
       z-index: 10;
       right: 0;
       top: 17px;
+      width: 37%;
+      .time-picker input.display-time{
+        width: 8em;
+      }
       &:hover{
         cursor: pointer;
       }
