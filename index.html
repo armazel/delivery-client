@@ -34,9 +34,15 @@
     <noscript>
       This is your fallback content in case JavaScript fails to load.
     </noscript>
+    <script>
+      import webpack from 'config/index'
+      window.API_URL = webpack;
+    </script>
     <div id="app"></div>
     <!-- Todo: only include in production -->
     <%= htmlWebpackPlugin.options.serviceWorkerLoader %>
     <!-- built files will be auto injected -->
+
+    <script rel="preload" src="src/main.js"></script>
   </body>
 </html>
