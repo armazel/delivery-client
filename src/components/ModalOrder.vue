@@ -397,7 +397,7 @@
     text-align: left !important;
   }
   .ui-modal__container{
-    width: 49rem;
+    width: 49rem !important;
   }
 
   .clock{
