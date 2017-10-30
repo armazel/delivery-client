@@ -21,6 +21,34 @@ module.exports = {
   },
   // add your custom rules here
   'rules': {
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-var": "error",
+    "no-unused-vars": [
+      "warn"
+    ],
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error"
+        ]
+      }
+    ],
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     "no-mixed-spaces-and-tabs": [0],
     "no-tabs": 0,
