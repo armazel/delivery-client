@@ -7,6 +7,8 @@ import ActionTypes from './_actions'
 import ReportModule from './reportModule'
 import AlertModule from './alertModule'
 import AuthModule from './authModule'
+import UserModule from './userModule'
+import ClientModule from './clientModule'
 
 Vue.use(Vuex)
 
@@ -15,7 +17,9 @@ const store = new Vuex.Store({
   modules: {
     report: ReportModule,
     auth: AuthModule,
-    alert: AlertModule
+    alert: AlertModule,
+    user: UserModule,
+    client: ClientModule,
   }
 })
 

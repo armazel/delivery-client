@@ -1,12 +1,12 @@
 import Utils from './utils'
 import store from '../store';
 
-const URI = '/gedemin/order'
+const URI = '/gedemin/client'
 
 export default {
-  saveOrder (order) {
+  addClient (client) {
     const options = Utils.prepareFetchOptions(store.getters.authUser);
-    return Utils.fetchPost(URI, order, options)
+    return Utils.fetchPost(URI,client, options)
       .then(Utils.unwrapJsonResponse);
   }
 

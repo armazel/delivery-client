@@ -1,7 +1,9 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
 
+
 const BUILD_NUMBER = (process.env.BUILD_NUMBER || '').trim() || 'dev';
+/*const yargsArgv = yargs.argv;*/
 
 module.exports = {
   build: {

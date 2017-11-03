@@ -63,47 +63,47 @@
        <template slot-scope="props">
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.id}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.operatorName}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{dateFilter(props.line.date)}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 10%">
            <span>{{props.line.pointOfDelivery}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 10%">
            <span>{{props.line.client}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 10%">
            <span>{{props.line.addressInfo}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.phoneNumber}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.type}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.statusOrder}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{dateFilter(props.line.timeSend)}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
          <td style="display: flex; flex: 1 1 5%">
            <span>{{props.line.curierName}}</span>
-           <img class="setting-hover" src="../assets/settings.png">
+           <i class="material-icons">settings</i>
          </td>
        </template>
      </rf-table>
@@ -214,7 +214,7 @@
           {
             id: '325FFER356',
             operatorName:'Авдотья',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Карлова 8',
             client: 'Прометей',
             addressInfo: 'Vaneeva 15-255',
@@ -227,7 +227,7 @@
           {
             id: '24ПА34R356',
             operatorName:'Авдотий',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
             addressInfo: 'Кунцевщина 15-255',
@@ -240,7 +240,7 @@
           {
             id: '24ПА34R356',
             operatorName:'Анатоль',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
             addressInfo: 'Кунцевщина 15-255',
@@ -253,7 +253,7 @@
           {
             id: '24ПА34R356',
             operatorName:'Евгатий',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
             addressInfo: 'Кунцевщина 15-255',
@@ -266,7 +266,7 @@
           {
             id: '24ПА34R356',
             operatorName:'Светозар',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Азазаза 14',
             client: 'Азазель',
             addressInfo: 'Кунцевщина 15-255',
@@ -279,7 +279,7 @@
           {
             id: '14G35FJ554H6',
             operatorName:'Аристарх',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Фрунзе 34',
             client: 'Аполон',
             addressInfo: 'Калукино 56-135',
@@ -292,7 +292,7 @@
           {
             id: '42G45HG45G',
             operatorName:'Прокоп',
-            date: new Date(),
+            dateCreateOrder: new Date(),
             pointOfDelivery: 'Карлова 8',
             client: 'Гамора',
             addressInfo: 'Западный колизей 54-128',
@@ -308,6 +308,7 @@
     },
 
     mounted () {
+      this.getUserGroup();
       this.dataInfo = _.cloneDeep(this.info);
     },
     watch:{
@@ -386,6 +387,10 @@
         return answer;
       },
 
+      getUserGroup(){
+        this.$store.dispatch(actions.getUserGroups);
+      },
+
       filterLines() {
         if(this.detailSearchText){
           this.dataInfo = filterDelivery(this.info, this.detailSearchText, this.templateSearch);
@@ -424,7 +429,8 @@
         answer = moments.toDate(answer);
       }
       if(searchTemplate === 'timeSend' || searchTemplate === 'date'){
-        return answer.toLowerCase().includes(lowerFilter);
+          answer = String(answer);
+        return answer.includes(lowerFilter);
       } else{
         return line[searchTemplate].toLowerCase().includes(lowerFilter);
       }
@@ -450,10 +456,12 @@
   th{
     justify-content: center !important;
   }
-  td img{
+  td i{
     position: absolute;
     opacity: 0;
     transform: translate(0,-100px);
+    font-size: 30px !important;
+    color: white;
   }
   td:hover:not(.option-panel) span{
     transform: translate(0,100px);
@@ -464,7 +472,7 @@
   td:not(.option-panel){
     overflow: hidden;
   }
-  td:hover:not(.option-panel) img{
+  td:hover:not(.option-panel) i{
     transform: translate(0,0px);
     opacity: 1;
     transition: all 0.5s ease;

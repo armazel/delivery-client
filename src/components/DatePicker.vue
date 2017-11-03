@@ -7,7 +7,6 @@
        orientation="landscape"
        picker-type="modal"
        icon="events"
-       :max-date="new Date()"
        placeholder="Выберите дату"
        v-model="firstPeriod"
        :lang="langMass"
@@ -24,7 +23,6 @@
       orientation="landscape"
       picker-type="modal"
       placeholder="Выберите дату"
-      :max-date="new Date()"
       v-model="secondPeriod"
       :lang="langMass"
     >
@@ -94,5 +92,8 @@
   span.devider-line{
     text-align: start;
     margin: 0 15px;
+  }
+  .ui-datepicker--orientation-landscape .ui-modal__container{
+    width: 26.75rem !important;
   }
 </style>

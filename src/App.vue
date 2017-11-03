@@ -24,23 +24,23 @@
         </ui-icon-button>
       </div>
       <div class="menu" v-if="authUser">
-        <span class="user-name">{{authUser.name}}</span>
+        <span class="user-name">{{authUser.surName}}</span>
         <ui-icon-button color="white" has-dropdown icon="account_circle" ref="toolbarMenuButton" size="large"
                         type="secondary">
           <ui-menu contain-focus has-icons slot="dropdown" :options="menuOptions"
                    @select="onMenuItemClick" @close="$refs.toolbarMenuButton.closeDropdown()"></ui-menu>
         </ui-icon-button>
       </div>
-      <div class="alerts-panel">
-        <div class="alerts" v-if="alerts.length">
-          <ui-alert v-for="alert in alerts" :type="alert.type" :key="alert.id" @dismiss="dismissAlert(alert)">{{ alert.message }}
-
-
-          </ui-alert>
-        </div>
-      </div>
-      <span class="version">{{version}}</span>
+      <span class="version">{{versionInfo}}</span>
     </header>
+    <div class="alerts-panel">
+      <div class="alerts" v-if="alerts.length">
+        <ui-alert v-for="alert in alerts" :type="alert.type" :key="alert.id" @dismiss="dismissAlert(alert)">{{ alert.message }}
+
+
+        </ui-alert>
+      </div>
+    </div>
     <main>
       <router-view></router-view>
     </main>
@@ -50,6 +50,9 @@
   import { actions } from '../src/store'
   import { moments } from '../src/utils'
   import _ from 'lodash'
+  import webpack from '../config/index'
+
+  const version = webpack.build.version;
 
   const MENU_OPTION_REFRESH = {
     id: 'refresh',
@@ -91,6 +94,7 @@
         ],
         breadcrumbs: [],
         authenticatedFlag:false,
+        version,
       };
     },
 
@@ -99,8 +103,13 @@
         return 5;
       },
 
-      version() {
-        return window.VERSION;
+      versionInfo() {
+          if(this.version){
+            return this.version;
+          } else{
+              return 'dev'
+          }
+
       },
 
       authUser(){
@@ -189,7 +198,7 @@ header {
   background-color: #35495E;
   color: #ffffff;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   .menu{
     display: flex;
     flex: 0 0 10%;
@@ -316,7 +325,9 @@ header span {
   background-color: rgba(76, 175, 80, 0.42);
 }
   .version{
-    position: relative;
+    position: absolute;
     right: 0;
+    top: 0;
+    font-size: 12px;
   }
 </style>

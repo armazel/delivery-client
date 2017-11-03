@@ -283,19 +283,22 @@
       border: none;
     }
     tr:hover:not(.option-panel .filters) span{
-      transform: translate(0,100px);
+      //transform: translate(0,100px);
       background: white;
       transition: all 1.5s ease;
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
     }
 
     tr:not(.filters):hover td{
-      background: white;
+      background: #35495E;
+      opacity: 0.9;
       border: none;
     }
     tr:hover:not(.filters) span{
-      transform: translate(0,100px);
-      background: white;
+      //transform: translate(0,100px);
+      //background: white;
+      color: white;
+      text-decoration: none;
       transition: all 1.5s ease;
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.16);
     }

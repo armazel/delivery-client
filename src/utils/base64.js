@@ -1,6 +1,7 @@
 export default {
   encode,
-  decode
+  decode,
+  nospace
 }
 
 const keyStr =
@@ -9,6 +10,12 @@ const keyStr =
   'ghijklmnopqrstuv' +
   'wxyz0123456789+/' +
   '=';
+
+function nospace (str) {
+  //let VResult = str.replace(/[^+0-9]/g, '');
+  let VResult = str.replace(/\s/g, '');
+  return VResult
+}
 
 function encode (input) {
   let output = '';

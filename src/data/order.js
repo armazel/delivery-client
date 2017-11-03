@@ -2,18 +2,29 @@ import { moments } from '../utils';
 
 class OrderDocument {
     constructor() {
-        this.id = -1;
-
-        this.date = null;
-        this.number = '';
-        this.status = 0;
-        this.invoices = [];
+      this.numberOrder = -1;
+      this.operatorName = '';
+      this.dateCreateOrder = {
+        date:'',
+        time:''
+      };
+      this.pointOfDelivery = '';
+      this.clientInfo = '';
+      this.addressInfo = '';
+      this.phoneNumber = '';
+      this.statusOrder = {};
+      this.timeSend = {
+        dateInfo:'',
+        timeInfo:''
+      };
+      this.type = {};
+      this.curierName = '';
 
         Object.seal(this);
     }
 
     prepareForRequest() {
-        this.date = moments.formatDateJson(this.date);
+        this.dateCreateOrder = moments.formatDateJson(this.dateCreateOrder);
         return this;
     }
 }
@@ -34,8 +45,8 @@ OrderDocument.fromRequest = function (data) {
         }
     }
 
-    if (data.date) {
-        document.date = moments.parseDate(data.date);
+    if (data.dateCreateOrder) {
+        document.dateCreateOrder = moments.parseDate(data.dateCreateOrder);
     }
 
     return document;

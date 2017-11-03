@@ -15,8 +15,9 @@ import Breadcrumbs from './components/Breadcrumbs'
 import ModelOrder from './components/ModalOrder'
 import DatePicker from './components/DatePicker'
 import VueTimepicker from 'vue2-timepicker'
-
-Vue.config.productionTip = false
+import vSelect from 'vue-select'
+/*Vue.config.productionTip = false*/
+import MaskedInput from 'vue-masked-input'
 
 Vue.use(Vuex);
 Vue.use(router);
@@ -28,6 +29,8 @@ Vue.component('rf-breadcrumbs', Breadcrumbs);
 Vue.component('model-order', ModelOrder);
 Vue.component('date-picker-area', DatePicker);
 Vue.component('vue-timepicker', VueTimepicker);
+Vue.component('masked-input', MaskedInput);
+Vue.component('v-select', vSelect);
 
 /* eslint-disable no-new */
 
@@ -51,6 +54,8 @@ function checkAuth() {
           if (!user) {
             router.replace({name: 'Hello'});
             return Promise.reject(new Error('Не найден пользователь'));
+          } else if(user.name){
+            router.replace({name: 'pageOrders'});
           }
         })
         .then(() => true);

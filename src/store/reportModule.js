@@ -21,7 +21,7 @@ export default {
   },
 
   actions: {
-    [actions.saveOrder]: ({commit}, order) => {
+    [actions.addOrder]: ({commit}, order) => {
       return Api.order.saveOrder(order)
         .then((savedOrder) => {
           if (savedOrder) {

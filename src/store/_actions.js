@@ -1,7 +1,7 @@
 export default {
-  getFirstSend: 'getFirstSend',
-  queryReports: 'queryReports',
-  printReport: 'printReport',
+  addOrder: 'addOrder',
+
+  getUserGroups: 'getUserGroups',
 
   addAlertInfo: 'addAlertInfo',
   addAlertSuccess: 'addAlertSuccess',
@@ -12,4 +12,6 @@ export default {
   authProcessInput: 'authProcessInput',
   authLogin: 'authLogin',
   authLogout: 'authLogout',
+
+  addNewClient: 'addNewClient',
 }

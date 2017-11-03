@@ -6,4 +6,6 @@ export default {
   CLEAR_ALERTS: 'CLEAR_ALERTS',
 
   SET_AUTH_USER: 'SET_AUTH_USER',
+
+  GET_USER: 'GET_USER',
 }
