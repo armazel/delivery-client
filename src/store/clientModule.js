@@ -5,19 +5,20 @@ import { collections } from '../utils'
 
 export default {
   state: {
-    client: []
+    client: [],
+    searchClients: []
   },
 
   getters: {
-   /* getUsersGroup: (state) => {
-      return state.usersGroup
-    }*/
+    getSearchClients: (state) => {
+      return state.searchClients
+    }
   },
 
   mutations: {
-    /*[mutations.GET_CLIENT]: (state, usersGroup) => {
-      state.usersGroup = usersGroup
-    },*/
+    [mutations.GET_CLIENTS_BY_PHONE]: (state, searchClients) => {
+      state.searchClients = searchClients
+    },
   },
 
   actions: {
@@ -28,6 +29,14 @@ export default {
 
           }*/
           return client;
+        });
+    },
+
+    [actions.getClientsByPhone]: ({commit}, phone) => {
+      return Api.client.searchClientByPhone(phone)
+        .then((searchClients) => {
+          commit(mutations.GET_CLIENTS_BY_PHONE,searchClients);
+          return searchClients;
         });
     },
   }

@@ -74,7 +74,7 @@ function initApp(authenticated) {
     template: '<App/>',
     components: { App }
   });
-
+  router.replace({name: 'pageOrders'});
   if (!authenticated) {
     // Перейдем на роут по умолчанию
     router.replace({name: 'Hello'});

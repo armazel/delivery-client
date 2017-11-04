@@ -9,6 +9,7 @@ import AlertModule from './alertModule'
 import AuthModule from './authModule'
 import UserModule from './userModule'
 import ClientModule from './clientModule'
+import ScanModule from './scanModule'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
     alert: AlertModule,
     user: UserModule,
     client: ClientModule,
+    scan: ScanModule,
   }
 })
 

@@ -2,7 +2,7 @@
  <div>
    <div v-if="authenticated">
      <div class="controll-panel">
-       <ui-button @click="openOrder" color="accent" icon="add">Добавить заказ</ui-button>
+       <ui-button @click="openOrder" color="accent" class="add-order" icon="add">Добавить заказ</ui-button>
      </div>
      <rf-table bordered striped hover
                keyField="id"
@@ -444,6 +444,9 @@
   .table-component__table tbody tr:nth-child(even)
   .rf-table tr{
     font-size: 15px !important;
+  }
+  body[modality="keyboard"] .ui-button--type-primary.ui-button--color-accent:focus{
+    background-color: #35495E !important;
   }
   td{
     display: flex;

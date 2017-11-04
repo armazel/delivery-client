@@ -14,4 +14,9 @@ export default {
   authLogout: 'authLogout',
 
   addNewClient: 'addNewClient',
+  getClientsByPhone: 'getClientsByPhone',
+
+  scanClear: 'scanClear',
+  scanKey: 'scanKey',
+  initScan: 'initScan',
 }

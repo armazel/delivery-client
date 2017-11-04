@@ -48,7 +48,7 @@
               :loading="selectLoading"
               :no-results="selectNoResults"
               :options="selectOptions"
-              @select = "selectPhoneNumber"
+              @select="selectPhoneNumber"
               @query-change="onQueryChange"
               v-model="queryNumber"
             ></ui-select>
@@ -58,11 +58,13 @@
           <div class="option-block" v-if="createUserAriaVisible">
 
             <div class="phone-number">
-              <i class="material-icons add" @click="plusNumbers(client.phone)">add</i><span class="add-text" v-if="client.phoneNumbersClient.length">({{client.phoneNumbersClient.length}})</span>
+              <i class="material-icons add" @click="plusNumbers(client.phone)">add</i><span class="add-text"
+                                                                                            v-if="client.phoneNumbersClient.length">({{client.phoneNumbersClient.length}})</span>
 
               <ui-textbox
                 floating-label
                 :multiLine=false
+                :max="phoneLengthInfo"
                 icon="call"
                 type="tel"
                 label="Номер телефона"
@@ -106,24 +108,24 @@
 
           <div class="option-block" v-if="createUserAriaVisible">
 
-           <div class="address-info">
-             <ui-textbox
-               floating-label
-               icon="location_on"
-               label="Улица"
-               v-model="client.addressInfoStreet">
-             </ui-textbox>
-             <ui-textbox
-               floating-label
-               label="Дом"
-               v-model="client.addressInfoBuilding">
-             </ui-textbox>
-             <ui-textbox
-               floating-label
-               label="Квартира"
-               v-model="client.addressInfoFlat">
-             </ui-textbox>
-           </div>
+            <div class="address-info">
+              <ui-textbox
+                floating-label
+                icon="location_on"
+                label="Улица"
+                v-model="client.addressInfoStreet">
+              </ui-textbox>
+              <ui-textbox
+                floating-label
+                label="Дом"
+                v-model="client.addressInfoBuilding">
+              </ui-textbox>
+              <ui-textbox
+                floating-label
+                label="Квартира"
+                v-model="client.addressInfoFlat">
+              </ui-textbox>
+            </div>
 
             <ui-textbox
               floating-label
@@ -217,22 +219,6 @@
               v-model="phoneNumber">
             </ui-textbox>
 
-            <div class="date-block">
-
-              <vue-timepicker v-model="yourTimeValueSend" :format=yourFormat></vue-timepicker>
-
-              <ui-datepicker
-                floating-label
-                orientation="landscape"
-                picker-type="modal"
-                icon="events"
-                v-model="timeSend"
-                :lang="langMass"
-                :min-date="new Date()"
-              >Дата/время доставки
-              </ui-datepicker>
-
-            </div>
             <ui-select floating-label
                        label="Тип доставки"
                        ref="typeSend"
@@ -253,6 +239,23 @@
                        :options="typeStatus"
                        :keys="{label: 'name', value: 'select'}">
             </ui-select>
+
+            <div class="date-block">
+
+              <vue-timepicker v-model="yourTimeValueSend" :format=yourFormat></vue-timepicker>
+
+              <ui-datepicker
+                floating-label
+                orientation="landscape"
+                picker-type="modal"
+                icon="events"
+                v-model="timeSend"
+                :lang="langMass"
+                :min-date="new Date()"
+              >Дата/время доставки
+              </ui-datepicker>
+
+            </div>
 
             <ui-textbox
               floating-label
@@ -294,7 +297,7 @@
 <script>
   import Api from '../api'
   import {actions} from '../store'
-  import {moments, base64} from '../utils'
+  import {moments, base64,common} from '../utils'
   import languageFr from '../utils/lang/lang-ru'
   import Order from '../data/order'
   import Client from '../data/client'
@@ -307,7 +310,7 @@
 
     data() {
       return {
-        phoneLengthInfo:13,
+        phoneLengthInfo: 13,
         defaultCode: '+375',
         codeRegionSelect: {
           name: 'Беларусь',
@@ -352,16 +355,13 @@
         colours: [
           {
             label: '+375 29 123 6346' + ' ' + 'Андроп',
-            value: 'red',
             icon: 'phone'
           },
           {
             label: '+375 29 545 2356' + ' ' + 'Прокопий',
-            value: 'blue',
             icon: 'phone'
           }, {
             label: '+375 29 894 5854' + ' ' + 'Евпатий',
-            value: 'green',
             icon: 'phone'
           },
         ],
@@ -451,7 +451,7 @@
 
         client: {
           phone: '+375',
-          phoneNumbersClient:[],
+          phoneNumbersClient: [],
           firstName: '',
           surName: '',
           middleName: '',
@@ -495,12 +495,24 @@
         return this.$store.getters.values;
       },
 
-      /*searchElement(){
-        return document.querySelector('.phone-controll .ui-select:last-child .ui-select__dropdown');
-      },*/
-
       getUsersGroup(){
         return this.$store.getters.getUsersGroup;
+      },
+
+      getSearchClients(){
+        //debugger;
+        let send = [];
+        let mass = this.$store.getters.getSearchClients;
+        mass.map((val,index) => {
+          send[index] = {label: val.phone + ' ' + val.surName};
+        });
+        return send;
+      },
+
+      scanString(){
+        if(this.$store.getters.scanString.length){
+          return this.$store.getters.scanString;
+        }
       },
 
       phoneCount(){
@@ -512,14 +524,36 @@
         return test;
       },
       validationCreateClientForm(){
-        let test = this.client.phone && this.client.surName && this.client.firstName && this.client.middleName && this.client.addressInfo && this.client.eMail && this.client.discount && this.client.comments && this.client.statusClientSelect;
+        let test = this.client.surName && this.client.firstName && this.client.middleName && this.client.addressInfo && this.client.eMail && this.client.discount && this.client.comments && this.client.statusClientSelect;
         return test;
       },
+    },
+
+    mounted(){
+      window.addEventListener('keydown', (event) => {
+        this.handleGlobalKeyDown(event);
+      });
     },
 
     watch: {
       saving(value) {
         this.$refs['modal'].dismissable = !value;
+      },
+
+      scanString(val){
+          if(!val && this.$refs.focusSearchPanel){
+            this.$refs.focusSearchPanel.query = '';
+          }
+
+        if(val && this.$refs.focusSearchPanel){
+          this.$nextTick(function () {
+            this.$refs.focusSearchPanel.classes[2] = {"is-active": true};
+            this.$refs.focusSearchPanel.$refs.dropdown.style.display = 'block'; // => 'обновлено'
+
+            this.$refs.focusSearchPanel.query = val;
+            this.onQueryChange(this.$refs.focusSearchPanel.$refs.searchInput._value);
+          })
+        }
       },
 
       selectNoResults(val){
@@ -550,6 +584,14 @@
           this.createUserAriaVisible = false;
           this.createUserFlag = false;
           this.phoneControllVisible = false;
+          this.selectNoResults = false;
+
+          this.$nextTick(function () {
+            this.$refs.typeSend.classes[2] = {"is-active": false};
+            this.$refs.typeSend.classes[4] = {"is-touched": false};
+
+            this.$refs.typeSend.$refs.dropdown.style.display = 'none';
+          })
 
         } else {
           this.numberOrder = '';
@@ -574,22 +616,13 @@
           this.createUserAriaVisible = false;
           this.$nextTick(function () {
             this.$refs.focusSearchPanel.classes[2] = {"is-active": false};
-            this.$refs.focusSearchPanel.classes[4] = {"is-touched": false};
-            this.$refs.focusSearchPanel.$refs.searchInput.autofocus = false;
-            this.$refs.focusSearchPanel.$refs.dropdown.style.display = 'none'; // => 'обновлено'
-          })
-
-          this.$nextTick(function () {
-            this.$refs.focusSearchPanel.classes[2] = {"is-active": false};
-            this.$refs.focusSearchPanel.classes[4] = {"is-touched": false};
             this.$refs.focusSearchPanel.$refs.searchInput.autofocus = false;
             this.$refs.focusSearchPanel.$refs.dropdown.style.display = 'none'; // => 'обновлено'
           })
 
           this.$nextTick(function () {
             this.$refs.focusSearchPanel.classes[2] = {"is-active": true};
-            this.$refs.focusSearchPanel.classes[4] = {"is-touched": true};
-            this.$refs.focusSearchPanel.$refs.searchInput.autofocus = true;
+            //this.$refs.focusSearchPanel.$refs.searchInput.autofocus = true;
             this.$refs.focusSearchPanel.$refs.dropdown.style.display = 'block'; // => 'обновлено'
           })
         }
@@ -609,16 +642,30 @@
 
       //добавление нескольких телефонных номеров
       plusNumbers(number){
-          if(number.length){
-              number = base64.nospace(number);
-              if(number.length === this.phoneLengthInfo){
-                  this.phoneNumbersClient.push(number);
+        if (number.length) {
+          number = base64.nospace(number);
+          if (number.length === this.phoneLengthInfo) {
+            if (this.client.phoneNumbersClient.length === 0) {
+              this.client.phoneNumbersClient.push(number);
+              this.$store.dispatch(actions.addAlertSuccess, 'Телефон добавлен');
+              this.client.phone = '+375'
+            } else {
+              this.client.phoneNumbersClient.map((val) => {
+                if (val === number) {
+                  this.$store.dispatch(actions.addAlertWarning, 'Такой телефон уже есть');
+                  return;
+                } else {
+                  this.client.phoneNumbersClient.push(number);
                   this.$store.dispatch(actions.addAlertSuccess, 'Телефон добавлен');
-              }else{
-                this.$store.dispatch(actions.addAlertError, 'Неверный формат номера телефона');
-                return;
-              }
+                  this.client.phone = '+375'
+                }
+              })
+            }
+          } else {
+            this.$store.dispatch(actions.addAlertError, 'Неверный формат номера телефона');
+            return;
           }
+        }
       },
 
       selectPhoneNumber(query) {
@@ -645,9 +692,12 @@
         }
         this.selectLoadingTimeout = setTimeout(() => {
           if (that.startsWith(query)) {
-            that.selectOptions = that.colours;
+              this.$store.dispatch(actions.getClientsByPhone,query)
+                .then(()=>{
+                  that.selectOptions = that.getSearchClients;
+                });
             that.selectNoResults = null;
-          }else {
+          } else {
             this.selectOptions = [];
             this.selectNoResults = true;
           }
@@ -658,10 +708,10 @@
 
       startsWith(string) {
         string = base64.nospace(string);
-        let test = /((\+)[375]{1}[1-9])+(?:-?\d){1,}/g.exec(string);
-        if(test){
+        let test = /((\+)[375]{1}[1-9])+(?:-?\d){1,4}/g.exec(string);
+        if (test) {
           let lengthNumber = this.phoneLengthInfo;
-          let answer = string.length > lengthNumber - 3 && string.length-1 < lengthNumber;
+          let answer = string.length > lengthNumber - 3 && string.length - 1 < lengthNumber;
           return answer;
         } else {
           this.$store.dispatch(actions.addAlertError, 'Неверный формат номера телефона');
@@ -691,9 +741,9 @@
 
         const client = Client.create();
 
-        if(this.client.phoneNumbersClient.length){
+        if (this.client.phoneNumbersClient.length) {
           client.phone = this.client.phoneNumbersClient;
-        } else{
+        } else {
           client.phone.push(this.client.phone);
         }
         client.firstName = this.client.firstName;
@@ -705,16 +755,16 @@
         client.comments = this.client.comments;
         client.status = this.client.statusClientSelect;
         // Сохраняем объект на сервере
-          this.$store.dispatch(actions.addNewClient, client)
-            .then(() => {
-              this.saving = false;
-              this.$store.dispatch(actions.addAlertSuccess, 'Заказ сохранен');
-              this.close();
-            })
-            .catch((error) => {
-              this.saving = false;
-              this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
-            });
+        this.$store.dispatch(actions.addNewClient, client)
+          .then(() => {
+            this.saving = false;
+            this.$store.dispatch(actions.addAlertSuccess, 'Заказ сохранен');
+            this.close();
+          })
+          .catch((error) => {
+            this.saving = false;
+            this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
+          });
       },
 
       saveOrder() {
@@ -757,6 +807,33 @@
               this.saving = false;
               this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
             });
+        }
+      },
+
+      handleGlobalKeyDown(event) {
+
+        // Не трогаем F клавиши
+        if (event.keyCode >= 112 && event.keyCode <= 123) {
+          return;
+        }
+        // Если не назначен здесь обработчик ввода, то ничего не делаем
+        /*if (!this.phoneControllVisible) {
+         return;
+         }*/
+
+        event.preventDefault();
+
+        switch (event.code) {
+          case 'Escape':
+            break;
+
+          default:
+            this.$store.dispatch(actions.scanKey, {
+              key: event.key,
+              code: event.code,
+              char: common.keyboardEventToChar(event)
+            });
+            break;
         }
       }
     }
@@ -824,30 +901,30 @@
       .option .phone-controll .ui-select__search {
         display: flex !important;
       }
-      .phone-number{
+      .phone-number {
         position: relative;
-        span.add-text{
+        span.add-text {
           position: absolute;
           color: rgba(0, 0, 0, 0.54);
         }
-        i.add{
+        i.add {
           position: absolute;
           right: 0;
           color: rgba(0, 0, 0, 0.54);
           bottom: 5px;
-          &:hover{
+          &:hover {
             cursor: pointer;
-            transform: scale(1.01,1.01);
+            transform: scale(1.01, 1.01);
             transition: all 0.5s ease;
           }
         }
       }
 
-      .address-info{
+      .address-info {
         display: flex;
         flex-wrap: nowrap;
       }
-      div.address-info > div:nth-child(1){
+      div.address-info > div:nth-child(1) {
         flex: 0 0 50%;
       }
     }
