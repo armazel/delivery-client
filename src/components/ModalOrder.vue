@@ -536,13 +536,11 @@
 
     watch: {
       saving(value) {
-          debugger;
         this.$refs['modal'].dismissable = !value;
       },
 
       phoneControllVisible(val){
           if(!val) {
-            debugger;
             this.$store.dispatch(actions.scanClear);
           }
       },

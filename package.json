@@ -11,12 +11,9 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "preCommitLinter": "node node_modules/eslint-pre-commit-diff --folder app"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
-  "pre-commit": {
-    "run": ["preCommitLinter"]
-  },
+  "pre-commit": [ "lint" ],
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "bluebird": "^3.5.1",
