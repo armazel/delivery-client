@@ -536,6 +536,7 @@
 
     watch: {
       saving(value) {
+          debugger;
         this.$refs['modal'].dismissable = !value;
       },
 

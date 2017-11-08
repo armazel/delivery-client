@@ -12,7 +12,15 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint:eslint": "eslint --ext=.jsx --ext=.js ./src/",
+    "lint:sass": "scss-lint ./src/"
   },
+
+  "pre-commit": [
+    "lint:eslint",
+    "lint:eslint"
+  ],
+
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "bluebird": "^3.5.1",
