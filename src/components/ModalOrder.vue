@@ -500,7 +500,6 @@
       },
 
       getSearchClients(){
-        //debugger;
         let send = [];
         let mass = this.$store.getters.getSearchClients;
         mass.map((val,index) => {
@@ -530,7 +529,9 @@
     },
 
     mounted(){
-
+      window.addEventListener('keydown', (event) => {
+        this.handleGlobalKeyDown(event);
+      });
     },
 
     watch: {
@@ -539,14 +540,8 @@
       },
 
       phoneControllVisible(val){
-          if(val){
-            window.addEventListener('keydown', (event) => {
-              this.handleGlobalKeyDown(event);
-            });
-          }else{
-            window.removeEventListener('keydown', (event) => {
-              this.handleGlobalKeyDown(event);
-            });
+          if(!val) {
+            this.$store.dispatch(actions.scanClear);
           }
       },
 
@@ -733,6 +728,7 @@
         this.createUserFlag = false;
         this.selectNoResults = null;
         this.createUserAriaVisible = true;
+        this.phoneControllVisible = false;
       },
 
       close() {
@@ -836,7 +832,6 @@
         switch (event.code) {
           case 'Escape':
             break;
-
           default:
             this.$store.dispatch(actions.scanKey, {
               key: event.key,
@@ -954,6 +949,9 @@
     margin-left: 20px;
   }
 
+  .ui-button--type-primary.ui-button--color-accent:hover{
+    background-color: #35495E !important;
+  }
   .ui-modal__footer {
     position: relative;
     height: 3.5rem;
