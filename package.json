@@ -11,21 +11,18 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
-    "lint:eslint": "eslint --ext=.jsx --ext=.js ./src/",
-    "lint:sass": "scss-lint ./src/"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "preCommitLinter": "node node_modules/eslint-pre-commit-diff --folder app"
   },
-
-  "pre-commit": [
-    "lint:eslint",
-    "lint:eslint"
-  ],
-
+  "pre-commit": {
+    "run": ["preCommitLinter"]
+  },
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
     "bluebird": "^3.5.1",
     "bundle-loader": "^0.5.5",
     "child_process": "^1.0.2",
+    "eslint-pre-commit-diff": "^1.0.4",
     "flatpickr": "^4.0.6",
     "fs": "0.0.1-security",
     "keen-ui": "^1.0.1",
