@@ -27,6 +27,7 @@ export default {
          * @param payload
          */
         [actions.scanKey]: ({state, commit, dispatch}, payload) => {
+          debugger;
             switch (payload.code) {
                 case 'Backspace':
                 case 'Delete':

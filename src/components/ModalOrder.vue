@@ -530,14 +530,24 @@
     },
 
     mounted(){
-      window.addEventListener('keydown', (event) => {
-        this.handleGlobalKeyDown(event);
-      });
+
     },
 
     watch: {
       saving(value) {
         this.$refs['modal'].dismissable = !value;
+      },
+
+      phoneControllVisible(val){
+          if(val){
+            window.addEventListener('keydown', (event) => {
+              this.handleGlobalKeyDown(event);
+            });
+          }else{
+            window.removeEventListener('keydown', (event) => {
+              this.handleGlobalKeyDown(event);
+            });
+          }
       },
 
       scanString(val){
@@ -811,15 +821,15 @@
       },
 
       handleGlobalKeyDown(event) {
+        // Если не назначен здесь обработчик ввода, то ничего не делаем
+        if (!this.phoneControllVisible) {
+          return;
+        }
 
         // Не трогаем F клавиши
         if (event.keyCode >= 112 && event.keyCode <= 123) {
           return;
         }
-        // Если не назначен здесь обработчик ввода, то ничего не делаем
-        /*if (!this.phoneControllVisible) {
-         return;
-         }*/
 
         event.preventDefault();
 
@@ -935,7 +945,7 @@
     left: 0;
     .ui-button--type-primary.ui-button--color-accent,
     .ui-button--type-primary.ui-button--color-accent:hover {
-      margin-left: 10px;
+      margin-left: 10px !important;
       background-color: #ff4426 !important;
     }
   }
