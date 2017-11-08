@@ -224,7 +224,7 @@ header {
   }
   .page-info{
     display: flex;
-    flex: 0 0 38%;
+    flex: 0 1 38%;
     justify-content: flex-start;
     align-items: center;
   }
@@ -232,7 +232,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 0 0 10%;
+    flex: 0 1 10%;
     opacity: 1;
     &:hover{
       opacity: 1;
@@ -250,12 +250,13 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 0 0 40%;
+    flex: 0 1 40%;
     opacity: 1;
   }
   .notification{
-    flex: 0 0 2%;
+    flex: 0 1 2%;
     position: relative;
+    max-height:110px;
     .notification-count{
       position: absolute;
       height: 15px;
@@ -294,8 +295,9 @@ header span {
 
 .alerts-panel {
   position: absolute;
-  top: 15%;
-  max-height: 100vh;
+  top: 8%;
+  max-height: 230px;
+  overflow: hidden;
   width: 100vw;
   z-index: 100;
 

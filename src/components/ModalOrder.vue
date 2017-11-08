@@ -109,22 +109,55 @@
           <div class="option-block" v-if="createUserAriaVisible">
 
             <div class="address-info">
+
               <ui-textbox
                 floating-label
-                icon="location_on"
+                class="city"
+                label="Город"
+                v-model="client.addressInfoCity">
+              </ui-textbox>
+
+              <ui-textbox
+                floating-label
                 label="Улица"
                 v-model="client.addressInfoStreet">
               </ui-textbox>
+
               <ui-textbox
                 floating-label
                 label="Дом"
-                v-model="client.addressInfoBuilding">
+                v-model="client.addressInfoHouse">
               </ui-textbox>
+
+            </div>
+
+            <div class="address-info">
+
+              <ui-textbox
+                floating-label
+                class="housing"
+                label="Корпус"
+                v-model="client.addressInfoHousing">
+              </ui-textbox>
+
+              <ui-textbox
+                floating-label
+                label="Подъезд"
+                v-model="client.addressInfoEntrance">
+              </ui-textbox>
+
+              <ui-textbox
+                floating-label
+                label="Этаж"
+                v-model="client.addressInfoFloor">
+              </ui-textbox>
+
               <ui-textbox
                 floating-label
                 label="Квартира"
-                v-model="client.addressInfoFlat">
+                v-model="client.addressInfoApartment">
               </ui-textbox>
+
             </div>
 
             <ui-textbox
@@ -167,6 +200,7 @@
               floating-label
               icon="person"
               label="Имя оператора"
+              :disabled="true"
               v-model="operatorName">
             </ui-textbox>
 
@@ -224,7 +258,7 @@
                        ref="typeSend"
                        icon="send"
                        class="configs"
-                       placeholder="Статус"
+                       placeholder="тип доставки"
                        v-model="type"
                        :options="typeDelivery"
                        :keys="{label: 'name', value: 'select'}">
@@ -314,16 +348,22 @@
         defaultCode: '+375',
         codeRegionSelect: {
           name: 'Беларусь',
-          value: '+375'
+          value: '+375',
+          countOperatorCode: 2,
+          countSimbolsOnNumber:7
         },
         codeRegion: [
           {
             name: 'Беларусь',
-            value: '+375'
+            value: '+375',
+            countOperatorCode: 2,
+            countSimbolsOnNumber:13
           },
           {
             name: 'Россия',
-            value: '+8'
+            value: '+8',
+            countOperatorCode: 3,
+            countSimbolsOnNumber:14
           }
         ],
 
@@ -455,9 +495,13 @@
           firstName: '',
           surName: '',
           middleName: '',
+          addressInfoCity: '',
           addressInfoStreet: '',
-          addressInfoBuilding: '',
-          addressInfoFlat: '',
+          addressInfoHouse: '',
+          addressInfoHousing: '',
+          addressInfoEntrance: '',
+          addressInfoFloor: '',
+          addressInfoApartment: '',
           eMail: '',
           discount: null,
           comments: '',
@@ -503,9 +547,10 @@
         let send = [];
         let mass = this.$store.getters.getSearchClients;
         mass.map((val,index) => {
-          send[index] = {label: val.phone + ' ' + val.surName};
+          //send[index] = {label: val.phone + ' ' + val.surName};
+          mass[index].label = val.phone + ' ' + val.surName;
         });
-        return send;
+        return mass;
       },
 
       scanString(){
@@ -546,6 +591,8 @@
       },
 
       scanString(val){
+          //кол-во символов в телефонном коде оператора
+
           if(!val && this.$refs.focusSearchPanel){
             this.$refs.focusSearchPanel.query = '';
           }
@@ -560,10 +607,6 @@
           })
         }
       },
-
-      selectNoResults(val){
-        this.createUserFlag = val;
-      }
     },
 
     methods: {
@@ -638,10 +681,11 @@
       },
 
       onQueryChange(query) {
+
         if (query.length === 0) {
           return;
         }
-        query = this.defaultCode + query;
+        query = this.codeRegionSelect.value + query;
         this.fetchRemoteResults(query);
       },
 
@@ -653,7 +697,7 @@
             if (this.client.phoneNumbersClient.length === 0) {
               this.client.phoneNumbersClient.push(number);
               this.$store.dispatch(actions.addAlertSuccess, 'Телефон добавлен');
-              this.client.phone = '+375'
+              this.client.phone = this.codeRegionSelect.value
             } else {
               this.client.phoneNumbersClient.map((val) => {
                 if (val === number) {
@@ -675,6 +719,42 @@
 
       selectPhoneNumber(query) {
         if (query) {
+
+          this.phoneNumber = query.phone;
+          this.firstName = query.surName;
+
+
+          /*client: {
+           phone: '+375',
+           phoneNumbersClient: [],
+           firstName: '',
+           surName: '',
+           middleName: '',
+           addressInfoCity: '',
+           addressInfoStreet: '',
+           addressInfoHouse: '',
+           addressInfoHousing: '',
+           addressInfoEntrance: '',
+           addressInfoFloor: '',
+           addressInfoApartment: '',
+           eMail: '',
+           discount: null,
+           comments: '',
+           statusClientSelect: '',
+           statusClient: [
+           {
+           name: 'VIP',
+           value: 'VIP'
+           },
+           {
+           name: 'Чет еще',
+           value: 'somebody'
+           }
+           ],
+           },*/
+
+
+
           this.$nextTick(function () {
             this.$refs.typeSend.classes[2] = {"is-active": false};
             this.$refs.typeSend.classes[4] = {"is-touched": false};
@@ -697,9 +777,14 @@
         }
         this.selectLoadingTimeout = setTimeout(() => {
           if (that.startsWith(query)) {
-              this.$store.dispatch(actions.getClientsByPhone,query)
+            query = base64.nospace(query);
+              this.$store.dispatch(actions.getClientsByPhone, query)
                 .then(()=>{
                   that.selectOptions = that.getSearchClients;
+                  //добавим кнопку создание клиента, если нет совпадений с сервера
+                  if(that.selectOptions.length === 0){
+                      that.createUserFlag = true;
+                  }
                 });
             that.selectNoResults = null;
           } else {
@@ -713,12 +798,20 @@
 
       startsWith(string) {
         string = base64.nospace(string);
-        let test = /((\+)[375]{1}[1-9])+(?:-?\d){1,4}/g.exec(string);
-        if (test) {
-          let lengthNumber = this.phoneLengthInfo;
-          let answer = string.length > lengthNumber - 3 && string.length - 1 < lengthNumber;
+        let test = /((\+)[375]{1}[1-9])+(?:-?\d){1,}/g.exec(string);
+        let simbolTest = /[^+0-9]/g.exec(string);
+        let lengthNumber = this.phoneLengthInfo;
+        let answer;
+        if (test && !simbolTest) {
+          //let answer = string.length > lengthNumber - 3 && string.length - 1 < lengthNumber;
+          answer = string.length === lengthNumber;
+          if(!answer){
+            this.$store.dispatch(actions.addAlertWarning, 'Неполный размер номера телефона');
+            return false;
+          }
           return answer;
         } else {
+          this.selectNoResults = null;
           this.$store.dispatch(actions.addAlertError, 'Неверный формат номера телефона');
           return false;
         }
@@ -755,7 +848,7 @@
         client.firstName = this.client.firstName;
         client.middleName = this.client.middleName;
         client.surName = this.client.surName;
-        client.addressInfo = this.client.addressInfo;
+        client.address = this.client.addressInfo;
         client.eMail = this.client.eMail;
         client.discount = this.client.discount;
         client.comments = this.client.comments;
@@ -764,12 +857,12 @@
         this.$store.dispatch(actions.addNewClient, client)
           .then(() => {
             this.saving = false;
-            this.$store.dispatch(actions.addAlertSuccess, 'Заказ сохранен');
+            this.$store.dispatch(actions.addAlertSuccess, 'Клиент сохранен');
             this.close();
           })
           .catch((error) => {
             this.saving = false;
-            this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения товара: ' + (error && error.message || error));
+            this.$store.dispatch(actions.addAlertError, 'Ошибка сохранения клиента: ' + (error && error.message || error));
           });
       },
 
@@ -836,7 +929,9 @@
             this.$store.dispatch(actions.scanKey, {
               key: event.key,
               code: event.code,
-              char: common.keyboardEventToChar(event)
+              char: common.keyboardEventToChar(event),
+              operatorCode: this.codeRegionSelect.countOperatorCode,
+              countSimbolsOnNumber: this.codeRegionSelect.countSimbolsOnNumber
             });
             break;
         }
@@ -929,7 +1024,7 @@
         display: flex;
         flex-wrap: nowrap;
       }
-      div.address-info > div:nth-child(1) {
+      div.address-info .city {
         flex: 0 0 50%;
       }
     }

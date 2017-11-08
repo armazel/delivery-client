@@ -50,7 +50,13 @@ export default {
 
     mutations: {
         [mutations.ADD_ALERT]: (state, alert) => {
+          if(state.alerts.length < 2){
             state.alerts.push(alert);
+          }else{
+            state.alerts.length = 0;
+            state.alerts.push(alert);
+          }
+
         },
 
         [mutations.DISMISS_ALERT]: (state, alert) => {

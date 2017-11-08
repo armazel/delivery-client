@@ -17,7 +17,7 @@
          <th style="display: flex; flex: 1 1 5%">Дата/время создания</th>
          <th  style="display: flex; flex: 1 1 10%">Точка доставки</th>
          <th  style="display: flex; flex: 1 1 10%">ФИО</th>
-         <th  style="display: flex; flex: 1 1 10%">Адресс</th>
+         <th  style="display: flex; flex: 1 1 10%">Адрес</th>
          <th  style="display: flex; flex: 1 1 5%">Телефон</th>
          <th  style="display: flex; flex: 1 1 5%">Тип</th>
          <th  style="display: flex; flex: 1 1 5%">Статус</th>

@@ -1,5 +1,6 @@
 import mutations from './_mutations';
 import actions from './_actions';
+import {moments, base64,common} from '../utils'
 
 export default {
     getters: {
@@ -46,7 +47,7 @@ export default {
 
                 default:
                     if (payload.char) {
-                        commit(mutations.ADD_GLOBAL_SCAN_CHAR, payload.char);
+                        commit(mutations.ADD_GLOBAL_SCAN_CHAR, payload);
                     }
                     break;
             }
@@ -64,7 +65,14 @@ export default {
 
     mutations: {
         [mutations.ADD_GLOBAL_SCAN_CHAR]: (state, key) => {
-            state.string = state.string + key;
+          if(state.string.length === key.operatorCode){
+            state.string = state.string + ' ' + key.char;
+          }else{
+            state.string = state.string + key.char;
+          }
+          if((base64.nospace(state.string)).length > key.countSimbolsOnNumber + key.operatorCode){
+            state.string = (state.string).substr(0,key.countSimbolsOnNumber + key.operatorCode + 1); //1 - это пробел
+          }
         },
 
         [mutations.REMOVE_GLOBAL_SCAN_LAST_CHAR]: (state) => {
