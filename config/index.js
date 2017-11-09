@@ -30,7 +30,7 @@ module.exports = {
 
   dev: {
     env: require('./dev.env'),
-    port: 13171,
+    port: 3030,
     serverUrl: "http://rf-server:13170",
     autoOpenBrowser: true,
     version: 'dev',
